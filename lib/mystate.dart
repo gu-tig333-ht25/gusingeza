@@ -8,21 +8,21 @@ class MyState extends ChangeNotifier {
     Task("Make food"),
   ];
 
-  todo_filter _filter = todo_filter.all; // aktuell filter
-  todo_filter get filter => _filter;
+  TodoFilter _filter = TodoFilter.all; // aktuell filter
+  TodoFilter get filter => _filter;
 
   List<Task> get tasks {
     switch (_filter) {
-      case todo_filter.done:
+      case TodoFilter.done:
         return _tasks.where((t) => t.isDone).toList();
-      case todo_filter.undone:
+      case TodoFilter.undone:
         return _tasks.where((t) => !t.isDone).toList();
-      case todo_filter.all:
+      case TodoFilter.all:
         return _tasks;
     }
   }
 
-  void setFilter(todo_filter filter) {
+  void setFilter(TodoFilter filter) {
     _filter = filter;
     notifyListeners();
   }

@@ -4,7 +4,7 @@ import 'taskitem.dart';
 import 'addtaskpage.dart';
 import 'mystate.dart';
 
-enum todo_filter { all, done, undone }
+enum TodoFilter { all, done, undone }
 
 class Task {
   String title;
@@ -54,22 +54,22 @@ class MyHomePage extends StatelessWidget {
             Center(child: Text(title)),
             Positioned(
               right: 0,
-              child: PopupMenuButton<todo_filter>(
+              child: PopupMenuButton<TodoFilter>(
                 icon: Icon(Icons.menu, color: const Color.fromARGB(64, 0, 0, 0),size: 30),
                 onSelected: (filter) {
                   context.read<MyState>().setFilter(filter);
                 },
                 itemBuilder: (context) => [
                   PopupMenuItem(
-                    value: todo_filter.all,
+                    value: TodoFilter.all,
                     child: Text("Alla todo"),
                   ),
                   PopupMenuItem(
-                    value: todo_filter.done,
+                    value: TodoFilter.done,
                     child: Text("Färdiga todo"),
                   ),
                   PopupMenuItem(
-                    value: todo_filter.undone,
+                    value: TodoFilter.undone,
                     child: Text("Ogjorda todo"),
                   ),
                 ],
