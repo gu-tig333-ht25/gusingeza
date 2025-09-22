@@ -1,13 +1,30 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'taskitem.dart';
+import 'addtaskpage.dart';
+import 'mystate.dart';
+
+enum TodoFilter { all, done, undone }
+
+class Task {
+  String title;
+  bool isDone;
+
+  Task(this.title, {this.isDone = false});
+}
 
 void main() {
-  runApp(MyApp());
+  runApp(
+    ChangeNotifierProvider(
+      create: (context) => MyState(),
+      child: MyApp(),
+    )
+  );
 }
 
 class MyApp extends StatelessWidget {
   MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -22,51 +39,9 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class MyHomePage extends StatefulWidget {
+class MyHomePage extends StatelessWidget {
   MyHomePage({super.key, required this.title});
-
   final String title;
-
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-
-  var addTask = 0;
-
-
-
-Widget taskItem(String text) {
-  return Column(
-    children: [
-      Padding(
-        padding: EdgeInsets.all(8),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween, 
-          children: [
-            IconButton(
-              icon: Icon(Icons.check_box_outline_blank),
-              onPressed: () {
-                print('Checkbox clicked for $text');
-              },
-            ),
-            Text(text),
-            IconButton(
-              icon: Icon(Icons.delete), 
-              onPressed: () {
-                print('Delete button pressed on $text');
-              },
-            ),
-          ],
-        ),
-      ),
-      Divider(color: Colors.grey),
-    ],
-  );
-}
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -76,25 +51,38 @@ Widget taskItem(String text) {
         title: Stack(
           alignment: Alignment.center,
           children: [
-            Center(child: Text(widget.title)),
+            Center(child: Text(title)),
             Positioned(
               right: 0,
-              child: Icon(Icons.menu, color: const Color.fromARGB(64, 0, 0, 0),size: 30),
+              child: PopupMenuButton<TodoFilter>(
+                icon: Icon(Icons.menu, color: const Color.fromARGB(64, 0, 0, 0),size: 30),
+                onSelected: (filter) {
+                  context.read<MyState>().setFilter(filter);
+                },
+                itemBuilder: (context) => [
+                  PopupMenuItem(
+                    value: TodoFilter.all,
+                    child: Text("Alla todo"),
+                  ),
+                  PopupMenuItem(
+                    value: TodoFilter.done,
+                    child: Text("Färdiga todo"),
+                  ),
+                  PopupMenuItem(
+                    value: TodoFilter.undone,
+                    child: Text("Ogjorda todo"),
+                  ),
+                ],
+            ),
             ),
         ]),
-        
-
       ),
-      body: Align(
-        alignment: AlignmentGeometry.topLeft,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: <Widget>[
-            taskItem('Clean room'),
-            taskItem('Do dishes'),
-            taskItem('Make food')
-          ],
-        ),
+      body: Consumer<MyState>(
+        builder: (context, state,child) {
+          return ListView(
+            children: state.tasks.map((task) => taskItem(context, task)).toList(),
+          );
+        },
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
@@ -108,33 +96,4 @@ Widget taskItem(String text) {
     );
   }
 }
-class AddTaskPage extends StatelessWidget {
-  const AddTaskPage({super.key});
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Add task page'),
-        centerTitle: true,
-      ),
-      body: Align(
-        alignment: Alignment.topCenter,
-        child: Container(
-          margin: const EdgeInsets.all(16),
-          padding: const EdgeInsets.all(8),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(8),
-            border: Border.all(color: Colors.grey, width: 1)
-          ),
-          child: TextField(
-            decoration: const InputDecoration(
-              hintText: 'Write new todo here',
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}
