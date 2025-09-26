@@ -4,13 +4,33 @@ import 'taskitem.dart';
 import 'addtaskpage.dart';
 import 'mystate.dart';
 
+
 enum TodoFilter { all, done, undone }
+const String apikey = "9a2cb6ce-ee5c-4cbe-abb4-f7c829c242ca";
 
 class Task {
+  String? id;
   String title;
   bool isDone;
 
-  Task(this.title, {this.isDone = false});
+  Task(this.title, {this.isDone = false, this.id});
+
+  factory Task.fromJson(Map<String, dynamic> json) {
+    return Task(
+      json["title"],
+      isDone: json["done"],
+      id: json["id"],
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      "title" : title,
+      "done" : isDone,
+    };
+  }
+
+
 }
 
 void main() {
