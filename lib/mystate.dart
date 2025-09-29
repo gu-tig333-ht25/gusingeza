@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'main.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'taskclass.dart';
 
 class MyState extends ChangeNotifier {
   final String apiKey = "9a2cb6ce-ee5c-4cbe-abb4-f7c829c242ca";
