@@ -4,14 +4,10 @@ import 'taskitem.dart';
 import 'addtaskpage.dart';
 import 'mystate.dart';
 
+
+
 enum TodoFilter { all, done, undone }
-
-class Task {
-  String title;
-  bool isDone;
-
-  Task(this.title, {this.isDone = false});
-}
+const String apikey = "9a2cb6ce-ee5c-4cbe-abb4-f7c829c242ca";
 
 void main() {
   runApp(
@@ -62,15 +58,15 @@ class MyHomePage extends StatelessWidget {
                 itemBuilder: (context) => [
                   PopupMenuItem(
                     value: TodoFilter.all,
-                    child: Text("Alla todo"),
+                    child: Text("All todos"),
                   ),
                   PopupMenuItem(
                     value: TodoFilter.done,
-                    child: Text("Färdiga todo"),
+                    child: Text("Done todos"),
                   ),
                   PopupMenuItem(
                     value: TodoFilter.undone,
-                    child: Text("Ogjorda todo"),
+                    child: Text("Undone todos"),
                   ),
                 ],
             ),
@@ -79,6 +75,11 @@ class MyHomePage extends StatelessWidget {
       ),
       body: Consumer<MyState>(
         builder: (context, state,child) {
+          if (state.tasks.isEmpty) {
+            return const Center(
+              child: Text('No todos'),
+            );
+          }
           return ListView(
             children: state.tasks.map((task) => taskItem(context, task)).toList(),
           );

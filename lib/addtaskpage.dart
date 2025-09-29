@@ -8,6 +8,13 @@ class AddTaskPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    void submitTask() {
+      final text = _controller.text.trim();
+        if (text.isNotEmpty) {
+          context.read<MyState>().addTask(text);
+          Navigator.pop(context);
+        }
+    }
     return Scaffold(
       appBar: AppBar(title: const Text('Add task page'),
       centerTitle: true,
@@ -18,17 +25,13 @@ class AddTaskPage extends StatelessWidget {
           children: [
             TextField(
               controller: _controller,
-              decoration:
-                  const InputDecoration(hintText: 'Write new todo here'),
+              decoration: const InputDecoration(hintText: 'Write new todo here'),
+              onSubmitted: (_) => submitTask(),
+
             ),
             const SizedBox(height: 16),
             ElevatedButton(
-              onPressed: () {
-                if (_controller.text.isNotEmpty) {
-                  context.read<MyState>().addTask(_controller.text);
-                  Navigator.pop(context);
-                }
-              },
+              onPressed: submitTask,
               child: const Text("Add task"),
             ),
           ],

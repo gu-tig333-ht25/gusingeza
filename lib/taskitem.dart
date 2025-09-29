@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'main.dart';
 import 'mystate.dart';
+import 'taskclass.dart';
 
 Widget taskItem(BuildContext context, Task task) {
   final done = task.isDone;
