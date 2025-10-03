@@ -92,6 +92,7 @@ class MyHomePage extends StatelessWidget {
             MaterialPageRoute(builder: (context) => AddTaskPage()),
           );
         },
+        tooltip: 'Add task',
         child: Icon(Icons.add),
       ),
     );
